@@ -6,9 +6,20 @@ device = ssd1306(port=0, address=0x3C)  # rev.1 users set port=0
 
 import netifaces as ni			# for ethernet
 import os				# for ping
+import socket				# for tunnel
+from contextlib import closing
 import psutil				# for uptime
 import time
 import math
+
+def check_socket(host, port):
+   with closing(socket.socket(socket.AF_INET, socket.SOCK_STREAM)) as sock:
+    sock.settimeout(1)
+    if sock.connect_ex((host, port)) == 0:
+     return 'UP'
+    else:
+     return 'DOWN'
+
 
 n = 5
 while n > 0:
@@ -33,7 +44,7 @@ while n > 0:
   print(hostname, 'is down!')
 
  ############  ROW 3: TUNNEL ############
-
+ tun = check_socket('localhost', 10900)
 
  ############  ROW 4: UPTIME ############
  from datetime import timedelta
@@ -67,7 +78,7 @@ while n > 0:
     font = ImageFont.load_default()
     draw.text((0, 0), "eth0: " + ip, font=font, fill=255)
     draw.text((0, 14), "status: " + net, font=font, fill=255)
-    draw.text((0, 26), "tunnel: ", font=font, fill=255)
+    draw.text((0, 26), "tunnel: " + tun, font=font, fill=255)
 #    draw.text((0, 38), "", font=font, fill=255)
     draw.text((0, 50), "uptime: " + my_uptime, font=font, fill=255)
 
