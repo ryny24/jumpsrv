@@ -21,7 +21,7 @@ while n > 0:
  ############  ROW 2: PING ############
  hostname = "208.123.173.1" #example
  #hostname = "8.8.8.9" #example
- response = os.system("ping -c 1 " + hostname)
+ response = os.system("ping -c 1 -W 1 " + hostname)
  print(response)
 
  #and then check the response...
