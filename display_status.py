@@ -2,6 +2,8 @@ from oled.device import ssd1306, sh1106
 from oled.render import canvas
 from PIL import ImageFont, ImageDraw
 
+fwd_port = 10021
+
 device = ssd1306(port=0, address=0x3C)  # rev.1 users set port=0
 
 import datetime				# for loop
@@ -22,6 +24,7 @@ def check_socket(host, port):
      return 'DOWN'
 
 
+cnt = 0
 n = 5
 while n > 0:
  print(" ------------------------- Current date:", datetime.datetime.utcnow())
@@ -67,7 +70,7 @@ while n > 0:
     draw.text((0, 0), "eth0: " + ip, font=font, fill=255)
     draw.text((0, 14), "status: " + net, font=font, fill=255)
     draw.text((0, 26), "tunnel: " + tun, font=font, fill=255)
-#    draw.text((0, 38), "", font=font, fill=255)
+    draw.text((0, 38), "port:   " + fwd_port, font=font, fill=255)
     draw.text((0, 50), "uptime: " + my_uptime, font=font, fill=255)
 
  # Calculate time to wait (for a 1 second loop)
@@ -84,4 +87,3 @@ while n > 0:
   time.sleep(wait/1000000)
  else:
   print("**** NO DELAY")
-
