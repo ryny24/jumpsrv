@@ -45,6 +45,7 @@ with canvas(device) as draw:
     font = ImageFont.load_default()
     draw.text((0, 0), "eth0: " + ip, font=font, fill=255)
     draw.text((0, 14), "status: " + net, font=font, fill=255)
+    draw.text((0, 14), "tunnel: ", font=font, fill=255)
 
 
 
