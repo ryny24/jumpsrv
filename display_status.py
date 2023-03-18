@@ -31,7 +31,7 @@ while n > 0:
  if 2 in ni.ifaddresses('eth0'):
   ip = ni.ifaddresses('eth0')[ni.AF_INET][0]['addr']
  else:
-  ip = '0.0.0.0'
+  ip = ''
 
  ############  ROW 2: PING ############
  hostname = "208.123.173.1" #example
