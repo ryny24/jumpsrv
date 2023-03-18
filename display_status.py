@@ -17,24 +17,9 @@ while n > 0:
   ip = ni.ifaddresses('eth0')[ni.AF_INET][0]['addr']
  else:
   ip = '0.0.0.0'
-#print(ip)  # should print "192.168.100.37"
-
-# Alternative Method if we need
-#import socket
-#import fcntl
-#import struct
-
-#def get_ip_address(ifname):
-#    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-#    return socket.inet_ntoa(fcntl.ioctl(
-#        s.fileno(),
-#        0x8915,  # SIOCGIFADDR
-#        struct.pack('256s', ifname[:15])
-#    )[20:24])
-#get_ip_address('eth0')  # '192.168.0.110'
 
  ############  ROW 2: PING ############
- hostname = "8.8.8.8" #example
+ hostname = "208.123.173.1" #example
  #hostname = "8.8.8.9" #example
  response = os.system("ping -c 1 " + hostname)
  print(response)
