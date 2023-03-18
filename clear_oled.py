@@ -40,5 +40,5 @@ device = Device(port=args.port, address=args.address)
 
 
 with canvas(device) as draw:
-    logo = Image.open('pi_logo.png')
+    logo = Image.open('/home/jump/pi_logo.png')
     draw.bitmap((32, 0), logo, fill=1)
