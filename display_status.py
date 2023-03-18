@@ -4,9 +4,16 @@ from PIL import ImageFont, ImageDraw
 
 device = ssd1306(port=0, address=0x3C)  # rev.1 users set port=0
 
+import netifaces as ni			# for ethernet
+import os				# for ping
+import psutil				# for uptime
+import time
+import math
+
+n = 5
+while n > 0:
 ############  ROW 1: ETHERNET IP ############
-import netifaces as ni
-ip = ni.ifaddresses('eth0')[ni.AF_INET][0]['addr']
+ ip = ni.ifaddresses('eth0')[ni.AF_INET][0]['addr']
 #print(ip)  # should print "192.168.100.37"
 
 # Alternative Method if we need
@@ -23,35 +30,31 @@ ip = ni.ifaddresses('eth0')[ni.AF_INET][0]['addr']
 #    )[20:24])
 #get_ip_address('eth0')  # '192.168.0.110'
 
-############  ROW 2: PING ############
-import os
-hostname = "8.8.8.8" #example
-#hostname = "8.8.8.9" #example
-response = os.system("ping -c 1 " + hostname)
-print(response)
+ ############  ROW 2: PING ############
+ hostname = "8.8.8.8" #example
+ #hostname = "8.8.8.9" #example
+ response = os.system("ping -c 1 " + hostname)
+ print(response)
 
-#and then check the response...
-if response == 0:
+ #and then check the response...
+ if response == 0:
   net = 'online'
   print(hostname, 'is up!')
-else:
+ else:
   net = 'offline'
   print(hostname, 'is down!')
 
-############  ROW 3: TUNNEL ############
+ ############  ROW 3: TUNNEL ############
 
 
-############  ROW 4: UPTIME ############
-import psutil
-import time
-import math
-from datetime import timedelta
-seconds = time.time() - psutil.boot_time()
+ ############  ROW 4: UPTIME ############
+ from datetime import timedelta
+ seconds = time.time() - psutil.boot_time()
+ my_uptime = "{}".format(str(timedelta(seconds=math.ceil(seconds))))
 
 
 #my_uptime = "{:0>8}".format(str(timedelta(seconds=seconds)))
 #my_uptime = "{}".format(str(timedelta(seconds=seconds)))
-my_uptime = "{}".format(str(timedelta(seconds=math.ceil(seconds))))
 # Result: '00:01:06'
 #"{:0>8}".format(str(timedelta(seconds=666777)))
 # Result: '7 days, 17:12:57'
@@ -72,10 +75,13 @@ my_uptime = "{}".format(str(timedelta(seconds=math.ceil(seconds))))
 
 
 ############    DISPLAY    ############
-with canvas(device) as draw:
+ with canvas(device) as draw:
     font = ImageFont.load_default()
     draw.text((0, 0), "eth0: " + ip, font=font, fill=255)
     draw.text((0, 14), "status: " + net, font=font, fill=255)
     draw.text((0, 26), "tunnel: ", font=font, fill=255)
 #    draw.text((0, 38), "", font=font, fill=255)
     draw.text((0, 50), "uptime: " + my_uptime, font=font, fill=255)
+
+
+ time.sleep(0.5)			# Sleep half a second
