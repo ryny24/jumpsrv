@@ -37,9 +37,7 @@ while n > 0:
  hostname = "208.123.173.1" #example
  #hostname = "8.8.8.9" #example
  response = os.system("ping -c 1 -W 1 " + hostname)
- print(response)
-
- # 3 bad pings before offline
+ print("ping response: ", response)
 
  #and then check the response...
  if response == 0:
@@ -48,8 +46,12 @@ while n > 0:
   print(hostname, 'is up!')
  else:
   cnt = cnt + 1
-  net = 'offline'
-  print(hostname, 'is down! (', cnt, ')')
+  if cnt > 1:
+   net = 'offline'
+   print(hostname, 'is down! (', cnt, ')')
+  else:
+   net = '?????'
+   print(hostname, 'going down! (', cnt, ')')
 
  ############  ROW 3: TUNNEL ############
  tun = check_socket('localhost', 10900)
