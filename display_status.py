@@ -4,6 +4,7 @@ from PIL import ImageFont, ImageDraw
 
 device = ssd1306(port=0, address=0x3C)  # rev.1 users set port=0
 
+import datetime				# for loop
 import netifaces as ni			# for ethernet
 import os				# for ping
 import socket				# for tunnel
@@ -23,7 +24,10 @@ def check_socket(host, port):
 
 n = 5
 while n > 0:
-############  ROW 1: ETHERNET IP ############
+ print(" ------------------------- Current date:", datetime.datetime.utcnow())
+ start = datetime.datetime.now()	# Track starting time
+
+ ############  ROW 1: ETHERNET IP ############
  if 2 in ni.ifaddresses('eth0'):
   ip = ni.ifaddresses('eth0')[ni.AF_INET][0]['addr']
  else:
@@ -32,16 +36,20 @@ while n > 0:
  ############  ROW 2: PING ############
  hostname = "208.123.173.1" #example
  #hostname = "8.8.8.9" #example
- response = os.system("ping -c 2 -W 1 " + hostname)
+ response = os.system("ping -c 1 -W 1 " + hostname)
  print(response)
+
+ # 3 bad pings before offline
 
  #and then check the response...
  if response == 0:
+  cnt = 0
   net = 'online'
   print(hostname, 'is up!')
  else:
+  cnt = cnt + 1
   net = 'offline'
-  print(hostname, 'is down!')
+  print(hostname, 'is down! (', cnt, ')')
 
  ############  ROW 3: TUNNEL ############
  tun = check_socket('localhost', 10900)
@@ -50,28 +58,6 @@ while n > 0:
  from datetime import timedelta
  seconds = time.time() - psutil.boot_time()
  my_uptime = "{}".format(str(timedelta(seconds=math.ceil(seconds))))
-
-
-#my_uptime = "{:0>8}".format(str(timedelta(seconds=seconds)))
-#my_uptime = "{}".format(str(timedelta(seconds=seconds)))
-# Result: '00:01:06'
-#"{:0>8}".format(str(timedelta(seconds=666777)))
-# Result: '7 days, 17:12:57'
-#"{:0>8}".format(str(timedelta(seconds=60*60*49+109)))
-# Result: '2 days, 1:01:49'
-
-#def seconds_elapsed():
-#    return time.time() - psutil.boot_time()
-
-#print(seconds_elapsed())
-
-#def cpu_usage():
-#    # load average, uptime
-#    uptime = datetime.now() - datetime.fromtimestamp(psutil.boot_time())
-#    av1, av2, av3 = os.getloadavg()
-#    return "Ld:%.1f %.1f %.1f Up: %s" \
-#            % (av1, av2, av3, str(uptime).split('.')[0])
-
 
 ############    DISPLAY    ############
  with canvas(device) as draw:
@@ -82,5 +68,18 @@ while n > 0:
 #    draw.text((0, 38), "", font=font, fill=255)
     draw.text((0, 50), "uptime: " + my_uptime, font=font, fill=255)
 
+ # Calculate time to wait (for a 1 second loop)
+# time.sleep(1)
+ diff = datetime.datetime.now() - start
+ diff_in_micro_secs = diff.total_seconds() * 1000000
 
- time.sleep(0.5)			# Sleep half a second
+# print("diff: " + str(diff) + "   diff_in_micro_secs: " + str(diff_in_micro_secs))
+
+ if  diff_in_micro_secs < 1000000:
+  wait = 1000000 - diff_in_micro_secs
+  print("**** Loop time was " + str(diff_in_micro_secs) + "ms. We need to wait " + str(wait) + "ms for 1 second interval ****")
+
+  time.sleep(wait/1000000)
+ else:
+  print("**** NO DELAY")
+
