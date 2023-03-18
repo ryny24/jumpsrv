@@ -41,16 +41,41 @@ else:
 ############  ROW 3: TUNNEL ############
 
 
+############  ROW 4: UPTIME ############
+import psutil
+import time
+import math
+from datetime import timedelta
+seconds = time.time() - psutil.boot_time()
+
+
+#my_uptime = "{:0>8}".format(str(timedelta(seconds=seconds)))
+#my_uptime = "{}".format(str(timedelta(seconds=seconds)))
+my_uptime = "{}".format(str(timedelta(seconds=math.ceil(seconds))))
+# Result: '00:01:06'
+#"{:0>8}".format(str(timedelta(seconds=666777)))
+# Result: '7 days, 17:12:57'
+#"{:0>8}".format(str(timedelta(seconds=60*60*49+109)))
+# Result: '2 days, 1:01:49'
+
+#def seconds_elapsed():
+#    return time.time() - psutil.boot_time()
+
+#print(seconds_elapsed())
+
+#def cpu_usage():
+#    # load average, uptime
+#    uptime = datetime.now() - datetime.fromtimestamp(psutil.boot_time())
+#    av1, av2, av3 = os.getloadavg()
+#    return "Ld:%.1f %.1f %.1f Up: %s" \
+#            % (av1, av2, av3, str(uptime).split('.')[0])
+
+
+############    DISPLAY    ############
 with canvas(device) as draw:
     font = ImageFont.load_default()
     draw.text((0, 0), "eth0: " + ip, font=font, fill=255)
     draw.text((0, 14), "status: " + net, font=font, fill=255)
-    draw.text((0, 14), "tunnel: ", font=font, fill=255)
-
-
-
-
-#        draw.text((0, 0), cpu_usage(), font=font2, fill=255)
-#        draw.text((0, 14), mem_usage(), font=font2, fill=255)
-#        draw.text((0, 26), disk_usage('/'), font=font2, fill=255)
-#        draw.text((0, 38), network('eth0'), font=font2, fill=255)
+    draw.text((0, 26), "tunnel: ", font=font, fill=255)
+#    draw.text((0, 38), "", font=font, fill=255)
+    draw.text((0, 50), "uptime: " + my_uptime, font=font, fill=255)
