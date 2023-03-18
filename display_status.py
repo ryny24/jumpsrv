@@ -70,7 +70,7 @@ while n > 0:
     draw.text((0, 0), "eth0: " + ip, font=font, fill=255)
     draw.text((0, 14), "status: " + net, font=font, fill=255)
     draw.text((0, 26), "tunnel: " + tun, font=font, fill=255)
-    draw.text((0, 38), "port:   " + fwd_port, font=font, fill=255)
+    draw.text((0, 38), "port:   " + str(fwd_port), font=font, fill=255)
     draw.text((0, 50), "uptime: " + my_uptime, font=font, fill=255)
 
  # Calculate time to wait (for a 1 second loop)
