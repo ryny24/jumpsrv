@@ -13,7 +13,10 @@ import math
 n = 5
 while n > 0:
 ############  ROW 1: ETHERNET IP ############
- ip = ni.ifaddresses('eth0')[ni.AF_INET][0]['addr']
+ if 2 in ni.ifaddresses('eth0'):
+  ip = ni.ifaddresses('eth0')[ni.AF_INET][0]['addr']
+ else:
+  ip = '0.0.0.0'
 #print(ip)  # should print "192.168.100.37"
 
 # Alternative Method if we need
