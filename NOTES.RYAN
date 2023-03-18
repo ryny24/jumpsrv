@@ -1,0 +1,6 @@
+git add display_status.py
+
+git rm test1.py
+
+git commit -m "update"
+git push -u origin main
