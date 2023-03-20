@@ -1,8 +1,9 @@
+# Version: 230319.1920
 from oled.device import ssd1306, sh1106
 from oled.render import canvas
 from PIL import ImageFont, ImageDraw
 
-fwd_port = 10021
+fwd_port = 10202
 
 device = ssd1306(port=0, address=0x3C)  # rev.1 users set port=0
 
